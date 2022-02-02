@@ -21,7 +21,6 @@ public class DriverFactory {
 		try {
 			if (driver == null && getProp().getProperty("prop.plataforma").equalsIgnoreCase("Android")) {
 				createDriverAndroid();
-//				createTestObjectDriver();
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -29,7 +28,6 @@ public class DriverFactory {
 		try {
 			if (driver == null && getProp().getProperty("prop.plataforma").equalsIgnoreCase("IOS")) {
 				createDriverIOS();
-//				createTestObjectDriver();
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
