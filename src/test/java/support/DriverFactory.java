@@ -44,11 +44,6 @@ public class DriverFactory {
 		desiredCapabilities.setCapability("deviceName", "emulator-5554");
 		desiredCapabilities.setCapability("automationName", "uiautomator2");
 		desiredCapabilities.setCapability(MobileCapabilityType.APP, getProp().getProperty("prop.app"));
-//		desiredCapabilities.setCapability(MobileCapabilityType.APP,
-//				"C:" + File.separator + "Users" + File.separator + "Niltinho" + File.separator + "Projetos"
-//						+ File.separator + "CursoAppium" + File.separator + "src" + File.separator + "test"
-//						+ File.separator + "resources" + File.separator + "CTAppium.apk");
-
 		try {
 			driver = new AppiumDriver<MobileElement>(new URL("http://127.0.0.1:4723/wd/hub"), desiredCapabilities);
 		} catch (MalformedURLException e) {
@@ -66,11 +61,6 @@ public class DriverFactory {
 		desiredCapabilities.setCapability("automationName", "XCUITest");
 		desiredCapabilities.setCapability("platformVersion", MobileCapabilityType.PLATFORM_VERSION);
 		desiredCapabilities.setCapability(MobileCapabilityType.APP, getProp().getProperty("prop.app"));
-//		desiredCapabilities.setCapability(MobileCapabilityType.APP,
-//				"C:" + File.separator + "Users" + File.separator + "Niltinho" + File.separator + "Projetos"
-//						+ File.separator + "CursoAppium" + File.separator + "src" + File.separator + "test"
-//						+ File.separator + "resources" + File.separator + "CTAppium.apk");
-
 		try {
 			driver = new AppiumDriver<MobileElement>(new URL("http://127.0.0.1:4723/wd/hub"), desiredCapabilities);
 		} catch (MalformedURLException e) {
