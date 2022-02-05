@@ -21,15 +21,25 @@ public class DriverFactory {
 
 	public static AppiumDriver<MobileElement> getDriver() {
 		try {
-			if (driver == null && getProp().getProperty("prop.plataforma").equalsIgnoreCase("Android")) {
+			if (driver == null && getProp().getProperty("prop.plataforma").equalsIgnoreCase("Android")
+					&& getProp().getProperty("prop.tipoExecucao").equalsIgnoreCase("Local")) {
 				createDriverAndroid();
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		try {
-			if (driver == null && getProp().getProperty("prop.plataforma").equalsIgnoreCase("IOS")) {
+			if (driver == null && getProp().getProperty("prop.plataforma").equalsIgnoreCase("IOS")
+					&& getProp().getProperty("prop.tipoExecucao").equalsIgnoreCase("Local")) {
 				createDriverIOS();
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		try {
+			if (driver == null && getProp().getProperty("prop.plataforma").equalsIgnoreCase("Android")
+					&& getProp().getProperty("prop.tipoExecucao").equalsIgnoreCase("Nuvem")) {
+				createTestObjectDriverAndroid();
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -70,7 +80,7 @@ public class DriverFactory {
 
 	}
 
-	private static void createTestObjectDriver() {
+	private static void createTestObjectDriverAndroid() {
 		DesiredCapabilities desiredCapabilities = new DesiredCapabilities();
 		desiredCapabilities.setCapability("platformName", "Android");
 		desiredCapabilities.setCapability("testobject_api_key", "XXXXXXXXXXXXX");
