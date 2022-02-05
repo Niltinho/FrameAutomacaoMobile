@@ -6,21 +6,15 @@ import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
 import support.DriverFactory;
-import tests.FormularioTeste;
-import tests.WebViewTeste;
+import tests.ExemploClasseTeste;
 
 @RunWith(Suite.class)
 @SuiteClasses({
-	FormularioTeste.class,
-	WebViewTeste.class
+	// Informar a(s) classe(s) abaixo
+	ExemploClasseTeste.class,
 })
 
 public class SuiteTeste {
-	
-	/*@BeforeClass
-	public static void inicializar() {
-	
-	}*/
 	
 	@AfterClass
 	public static void finaliza() {

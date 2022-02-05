@@ -1,5 +1,9 @@
 package support;
 
+import static io.appium.java_client.touch.offset.ElementOption.element;
+import static io.appium.java_client.touch.offset.PointOption.point;
+import static org.openqa.selenium.support.PageFactory.initElements;
+import static org.openqa.selenium.support.ui.ExpectedConditions.*;
 import static support.DriverFactory.getDriver;
 
 import java.util.List;
@@ -8,76 +12,108 @@ import java.util.Set;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import io.appium.java_client.MobileBy;
 import io.appium.java_client.MobileElement;
 import io.appium.java_client.TouchAction;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;
-import io.appium.java_client.touch.offset.ElementOption;
-import io.appium.java_client.touch.offset.PointOption;
 
 public class BasePage {
-	
+
 	public BasePage() {
-		PageFactory.initElements(new AppiumFieldDecorator(DriverFactory.getDriver()), this);
+		initElements(new AppiumFieldDecorator(getDriver()), this);
 	}
 
-	public void escreverCampo(By by, String nome) {
-		DriverFactory.getDriver().findElement(by).sendKeys(nome);
+	private By getElement(String element) {
+		element = element.replace("Located by By.chained({By.", "").replace("})", "");
+		if (element.contains("xpath: ") || element.contains("//")) {
+			return MobileBy.xpath(element.replace("xpath: ", "").replace("By.", ""));
+		} else if (element.contains("AccessibilityId: ")) {
+			return MobileBy.AccessibilityId(element.replace("AccessibilityId:", "").substring(1));
+		} else {
+			return MobileBy.id(element.replace("id: ", "").replace("By.", ""));
+		}
 	}
 
-	public void escreverCampoPorTexto(String texto, String nome) {
-		DriverFactory.getDriver().findElement(By.xpath("//*[@text='" + texto + "']")).sendKeys(nome);
+	public void escreverCampo(MobileElement elemento, String texto) {
+		elemento.sendKeys(texto);
 	}
 
-	public String obterTexto(By by) {
-		return DriverFactory.getDriver().findElement(by).getText();
+	public void escreverCampoPorTexto(String texto, String valor) {
+		getDriver().findElement(By.xpath("//*[@text='" + texto + "' or @name='" + texto + "']")).sendKeys(valor);
 	}
 
-	public void clicar(By by) {
-		DriverFactory.getDriver().findElement(by).click();
+	public String obterTexto(MobileElement elemento) {
+		return elemento.getText();
+	}
+
+	public void clicar(MobileElement elemento) {
+		elemento.click();
 	}
 
 	public void clicarPorTexto(String texto) {
-		clicar(By.xpath("//*[@text='" + texto + "']"));
+		getDriver().findElement(By.xpath("//*[@text='" + texto + "' or @name='" + texto + "']")).click();
 	}
 
-	public void selecionarCombo(By by, String valor) {
-		DriverFactory.getDriver().findElement(by).click();
+	public void selecionarComboPorTexto(MobileElement elemento, String valor) {
+		elemento.click();
 		clicarPorTexto(valor);
 	}
 
-	public boolean isCheckMarcado(By by) {
-		return DriverFactory.getDriver().findElement(by).getAttribute("checked").equalsIgnoreCase("true");
+	public void selecionarCombo(MobileElement elemento, String valor) {
+		Select selecionar = new Select(elemento);
+		selecionar.selectByVisibleText(valor);
+	}
+
+	public boolean isCheckMarcado(MobileElement elemento) {
+		return elemento.getAttribute("checked").equalsIgnoreCase("true");
 	}
 
 	public boolean existeElementoPorTexto(String texto) {
-		List<MobileElement> elementos = DriverFactory.getDriver().findElements(By.xpath("//*[@text='" + texto + "']"));
+		List<MobileElement> elementos = getDriver()
+				.findElements(By.xpath("//*[@text='" + texto + "' or @name='" + texto + "']"));
 		return elementos.size() > 0;
 	}
 
+	private boolean existeElemento(By by) {
+		boolean status = false;
+		if (DriverFactory.getDriver().findElements(by).size() > 0) {
+			status = true;
+		}
+		return status;
+	}
+
 	public void tap(int x, int y) {
-		new TouchAction<>(DriverFactory.getDriver()).tap(PointOption.point(x, y)).waitAction().perform();
+		new TouchAction<>(getDriver()).tap(point(x, y)).waitAction().perform();
 	}
 
 	public void aguardarElementoPorTexto(String texto) {
-		WebDriverWait wait = new WebDriverWait(DriverFactory.getDriver(), 10);
-		wait.until(ExpectedConditions.visibilityOfElementLocated(MobileBy.xpath("//*[@text='" + texto + "']")));
+		WebDriverWait wait = new WebDriverWait(getDriver(), 30);
+		wait.until(visibilityOfElementLocated(MobileBy.xpath("//*[@text='" + texto + "' or @name='" + texto + "']")));
 	}
 
-	public void scroll(double inicio, double fim) {
-		Dimension size = DriverFactory.getDriver().manage().window().getSize();
+	public void aguardarElementoAparecer(String elemento) {
+		WebDriverWait wait = new WebDriverWait(getDriver(), 30);
+		wait.until(visibilityOfElementLocated(getElement(elemento)));
+	}
+
+	public void aguardarElementoDesaparecer(String elemento) {
+		WebDriverWait wait = new WebDriverWait(getDriver(), 30);
+		wait.until(invisibilityOfElementLocated(getElement(elemento)));
+	}
+
+	private void scroll(double inicio, double fim) {
+		Dimension size = getDriver().manage().window().getSize();
 
 		int x = size.width / 2;
 
 		int start_y = (int) (size.height * inicio);
 		int end_y = (int) (size.height * fim);
 
-		new TouchAction<>(DriverFactory.getDriver()).press(PointOption.point(x, start_y)).waitAction()
-				.moveTo(PointOption.point(x, end_y)).release().perform();
+		new TouchAction<>(getDriver()).press(point(x, start_y)).waitAction().moveTo(point(x, end_y)).release()
+				.perform();
 	}
 
 	public void scrollElement(WebElement element, double inicio, double fim) {
@@ -86,20 +122,26 @@ public class BasePage {
 		int start_y = (int) (element.getSize().height * inicio);
 		int end_y = (int) (element.getSize().height * fim);
 
-		new TouchAction<>(DriverFactory.getDriver()).press(PointOption.point(x, start_y)).waitAction()
-				.moveTo(PointOption.point(x, end_y)).release().perform();
+		new TouchAction<>(getDriver()).press(point(x, start_y)).waitAction().moveTo(point(x, end_y)).release()
+				.perform();
 	}
 
-	public void swipe(double inicio, double fim) {
-		Dimension size = DriverFactory.getDriver().manage().window().getSize();
+	public void scrollAteEncontrarElemento(String elemento) {
+		for (int qtd = 0; !existeElemento(getElement(elemento)) && qtd < 10; qtd++) {
+			scrollDown();
+		}
+	}
+
+	private void swipe(double inicio, double fim) {
+		Dimension size = getDriver().manage().window().getSize();
 
 		int y = size.height / 2;
 
 		int start_x = (int) (size.width * inicio);
 		int end_x = (int) (size.width * fim);
 
-		new TouchAction<>(DriverFactory.getDriver()).press(PointOption.point(start_x, y)).waitAction()
-				.moveTo(PointOption.point(end_x, y)).release().perform();
+		new TouchAction<>(getDriver()).press(point(start_x, y)).waitAction().moveTo(point(end_x, y)).release()
+				.perform();
 	}
 
 	public void swipeElement(WebElement element, double inicio, double fim) {
@@ -108,8 +150,8 @@ public class BasePage {
 		int start_x = (int) (element.getSize().width * inicio);
 		int end_x = (int) (element.getSize().width * fim);
 
-		new TouchAction<>(DriverFactory.getDriver()).press(PointOption.point(start_x, y)).waitAction()
-				.moveTo(PointOption.point(end_x, y)).release().perform();
+		new TouchAction<>(getDriver()).press(point(start_x, y)).waitAction().moveTo(point(end_x, y)).release()
+				.perform();
 	}
 
 	public void scrollDown() {
@@ -128,9 +170,14 @@ public class BasePage {
 		swipe(0.1, 0.9);
 	}
 
-	public void clicarLongo(String elemento) {
-		MobileElement element = DriverFactory.getDriver().findElement(MobileBy.xpath("//*[@text='" + elemento + "']"));
-		new TouchAction<>(DriverFactory.getDriver()).longPress(ElementOption.element(element)).perform();
+	public void esconderTeclado() {
+		getDriver().hideKeyboard();
+	}
+
+	public void clicarLongoPorTexto(String texto) {
+		MobileElement element = getDriver()
+				.findElement(MobileBy.xpath("//*[@text='" + texto + "' or @name='" + texto + "']"));
+		new TouchAction<>(getDriver()).longPress(element(element)).perform();
 	}
 
 	public void entrarContextoWeb() {
@@ -174,7 +221,7 @@ public class BasePage {
 		}
 	}
 
-	public int verificaQtdContexto() {
+	private int verificaQtdContexto() {
 		Set<String> contextHandles = getDriver().getContextHandles();
 		int convertIndex = contextHandles.size() - 1;
 		return convertIndex;

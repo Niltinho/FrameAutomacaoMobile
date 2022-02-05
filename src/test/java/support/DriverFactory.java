@@ -1,5 +1,7 @@
 package support;
 
+import static java.lang.System.getProperty;
+
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -41,7 +43,7 @@ public class DriverFactory {
 		desiredCapabilities.setCapability("platformName", "Android");
 		desiredCapabilities.setCapability("deviceName", "emulator-5554");
 		desiredCapabilities.setCapability("automationName", "uiautomator2");
-		desiredCapabilities.setCapability(MobileCapabilityType.APP, getProp().getProperty("prop.app"));
+		desiredCapabilities.setCapability("app", getProp().getProperty("prop.app"));
 		try {
 			driver = new AppiumDriver<MobileElement>(new URL("http://127.0.0.1:4723/wd/hub"), desiredCapabilities);
 		} catch (MalformedURLException e) {
@@ -54,11 +56,11 @@ public class DriverFactory {
 	private static void createDriverIOS() throws IOException {
 		DesiredCapabilities desiredCapabilities = new DesiredCapabilities();
 
-		desiredCapabilities.setCapability("platformName", "iOS");
+		desiredCapabilities.setCapability("platformName", "IOS");
 		desiredCapabilities.setCapability("deviceName", MobileCapabilityType.DEVICE_NAME);
 		desiredCapabilities.setCapability("automationName", "XCUITest");
 		desiredCapabilities.setCapability("platformVersion", MobileCapabilityType.PLATFORM_VERSION);
-		desiredCapabilities.setCapability(MobileCapabilityType.APP, getProp().getProperty("prop.app"));
+		desiredCapabilities.setCapability("app", getProp().getProperty("prop.app"));
 		try {
 			driver = new AppiumDriver<MobileElement>(new URL("http://127.0.0.1:4723/wd/hub"), desiredCapabilities);
 		} catch (MalformedURLException e) {
@@ -95,7 +97,7 @@ public class DriverFactory {
 	public static Properties getProp() throws IOException {
 		Properties props = new Properties();
 		FileInputStream file = new FileInputStream(
-				System.getProperty("user.dir") + "/src/test/resources/properties/config.properties");
+				getProperty("user.dir") + "/src/test/resources/properties/config.properties");
 		props.load(file);
 		return props;
 	}
