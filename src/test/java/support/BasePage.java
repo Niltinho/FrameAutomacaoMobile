@@ -154,7 +154,7 @@ public class BasePage {
 	 * @author Nilton L. Correia 
 	 * Método que aguarda o elemento aparecer, passando o texto do elemento
 	 */
-	public void aguardarElementoPorTexto(String texto) {
+	public void esperarElementoPorTexto(String texto) {
 		WebDriverWait wait = new WebDriverWait(getDriver(), 30);
 		wait.until(visibilityOfElementLocated(MobileBy.xpath("//*[@text='" + texto + "' or @name='" + texto + "']")));
 		info(texto + " apareceu com sucesso");
@@ -164,7 +164,7 @@ public class BasePage {
 	 * @author Nilton L. Correia 
 	 * Método que aguarda o elemento aparecer
 	 */
-	public void aguardarElementoAparecer(String elemento) {
+	public void esperarElementoAparecer(String elemento) {
 		WebDriverWait wait = new WebDriverWait(getDriver(), 30);
 		wait.until(visibilityOfElementLocated(getElement(elemento)));
 		info(elemento + " apareceu com sucesso");
@@ -174,7 +174,7 @@ public class BasePage {
 	 * @author Nilton L. Correia 
 	 * Método que aguarda o elemento desaparecer
 	 */
-	public void aguardarElementoDesaparecer(String elemento) {
+	public void esperarElementoDesaparecer(String elemento) {
 		WebDriverWait wait = new WebDriverWait(getDriver(), 30);
 		wait.until(invisibilityOfElementLocated(getElement(elemento)));
 		info(elemento + " desapareceu com sucesso");
