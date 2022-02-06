@@ -1,8 +1,8 @@
 # FrameAutomacaoMobile
-Frame genérico para iniciar com a automação mobile, android e iOS
+Frame genérico para iniciar com a automação mobile, android e iOS.
 
 
- - Classe Screen - Setar os elementos do Android, IOS e Webview.
+ - Classe Screen - Setar os elementos do Android, iOS e Webview.
 
 - Classe Page - Implementar os métodos para executar as ações nas páginas, por exemplo, cliques, escrever num determinado campo, fazer validações.
 
