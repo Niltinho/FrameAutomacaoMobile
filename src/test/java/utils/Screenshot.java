@@ -1,6 +1,7 @@
 package utils;
 
 import static support.DriverFactory.getDriver;
+import static utils.Log.info;
 
 import java.io.File;
 
@@ -13,12 +14,16 @@ import io.appium.java_client.MobileElement;
 
 public class Screenshot {
 
+	/**
+	 * @author Nilton L. Correia 
+	 * Método para tirar evidência
+	 */
 	public static void tirar(AppiumDriver<MobileElement> appiumDriver, String arquivo) {
 		File screenshot = ((TakesScreenshot) getDriver()).getScreenshotAs(OutputType.FILE);
 		try {
 			FileUtils.copyFile(screenshot, new File(arquivo));
 		} catch (Exception e) {
-			System.out.println("Houveram problemas ao copiar o arquvivo para a pasta");
+			info("Houveram problemas ao copiar o arquivo para a pasta");
 		}
 	}
 

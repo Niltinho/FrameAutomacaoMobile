@@ -3,6 +3,7 @@ package support;
 import static support.DriverFactory.getDriver;
 import static support.DriverFactory.killDriver;
 import static utils.Generator.dataHoraParaArquivo;
+import static utils.Screenshot.tirar;
 
 import java.io.File;
 
@@ -11,8 +12,6 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.rules.TestName;
-
-import utils.Screenshot;
 
 public class BaseTest {
 
@@ -28,9 +27,9 @@ public class BaseTest {
 	public void tearDown() {
 		String arquivoPrint = "target" + File.separator + "print" + File.separator + testname.getMethodName() + "_"
 				+ dataHoraParaArquivo() + ".png";
-		Screenshot.tirar(getDriver(), arquivoPrint);
+		tirar(getDriver(), arquivoPrint);
 
-		DriverFactory.getDriver().resetApp();
+		getDriver().resetApp();
 	}
 
 	@AfterClass

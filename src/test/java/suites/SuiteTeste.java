@@ -1,11 +1,12 @@
 package suites;
 
+import static support.DriverFactory.*;
+
 import org.junit.AfterClass;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
-import support.DriverFactory;
 import tests.ExemploClasseTeste;
 
 @RunWith(Suite.class)
@@ -18,7 +19,7 @@ public class SuiteTeste {
 	
 	@AfterClass
 	public static void finaliza() {
-		DriverFactory.killDriver();
+		killDriver();
 	}
 	
 }

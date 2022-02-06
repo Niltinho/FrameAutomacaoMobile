@@ -19,6 +19,11 @@ public class DriverFactory {
 
 	private static AppiumDriver<MobileElement> driver;
 
+	/**
+	 * @author Nilton L. Correia 
+	 * Método que entra no driver, com base nos parâmetros
+	 *         do arquivo .properties
+	 */
 	public static AppiumDriver<MobileElement> getDriver() {
 		try {
 			if (driver == null && getProp().getProperty("prop.plataforma").equalsIgnoreCase("Android")
@@ -47,6 +52,10 @@ public class DriverFactory {
 		return driver;
 	}
 
+	/**
+	 * @author Nilton L. Correia 
+	 * Método que seta o driver android local
+	 */
 	private static void createDriverAndroid() throws IOException {
 		DesiredCapabilities desiredCapabilities = new DesiredCapabilities();
 
@@ -63,6 +72,10 @@ public class DriverFactory {
 
 	}
 
+	/**
+	 * @author Nilton L. Correia 
+	 * Método que seta o driver iOS local
+	 */
 	private static void createDriverIOS() throws IOException {
 		DesiredCapabilities desiredCapabilities = new DesiredCapabilities();
 
@@ -80,16 +93,19 @@ public class DriverFactory {
 
 	}
 
+	/**
+	 * @author Nilton L. Correia 
+	 * Método que seta o driver android num servidor na nuvem
+	 */
 	private static void createTestObjectDriverAndroid() {
 		DesiredCapabilities desiredCapabilities = new DesiredCapabilities();
 		desiredCapabilities.setCapability("platformName", "Android");
 		desiredCapabilities.setCapability("testobject_api_key", "XXXXXXXXXXXXX");
-		desiredCapabilities.setCapability("appiumVersion", "1.7.2");
+		desiredCapabilities.setCapability("appiumVersion", "X.X.X");
 		desiredCapabilities.setCapability("automationName", "uiautomator2");
 
 		try {
-			driver = new AppiumDriver<MobileElement>(new URL("https://us1.appium.testobject.com/wd/hub"),
-					desiredCapabilities);
+			driver = new AppiumDriver<MobileElement>(new URL(""), desiredCapabilities);
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		}
@@ -97,6 +113,10 @@ public class DriverFactory {
 
 	}
 
+	/**
+	 * @author Nilton L. Correia 
+	 * Método que finaliza o driver
+	 */
 	public static void killDriver() {
 		if (driver != null) {
 			driver.quit();
@@ -104,6 +124,10 @@ public class DriverFactory {
 		}
 	}
 
+	/**
+	 * @author Nilton L. Correia 
+	 * Método para obter os parâmetros setados no arquivo .properties
+	 */
 	public static Properties getProp() throws IOException {
 		Properties props = new Properties();
 		FileInputStream file = new FileInputStream(
